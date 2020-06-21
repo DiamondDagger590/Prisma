@@ -19,7 +19,7 @@ repositories {
     mavenCentral()
     maven {
         name = 'spigotmc-repo'
-        url = 'https://hub.spigot mc.org/nexus/content/repositories/snapshots/'
+        url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
     }
     maven {
         name = 'sonatype'
