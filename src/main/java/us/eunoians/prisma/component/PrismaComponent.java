@@ -1,8 +1,13 @@
 package us.eunoians.prisma.component;
 
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.TextComponent;
 
 import java.util.ArrayList;
@@ -10,6 +15,13 @@ import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * This code is a modified version of TextComponent from Bungee, with the intent of supporting custom color codes
+ */
+@Getter
+@Setter
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 public class PrismaComponent extends BaseComponent{
   
   private static final Pattern url = Pattern.compile("^(?:(https?)://)?([-\\w_\\.]{2,}\\.[a-z]{2,4})(/\\S*)?$");
@@ -141,7 +153,13 @@ public class PrismaComponent extends BaseComponent{
    * @param textComponent the component to copy from
    */
   public PrismaComponent(TextComponent textComponent){
-    super(textComponent);
+    copyFormatting(textComponent, ComponentBuilder.FormatRetention.ALL, true);
+    
+    if(textComponent.getExtra() != null){
+      for(BaseComponent extra : textComponent.getExtra()){
+        addExtra(extra.duplicate());
+      }
+    }
     setText(textComponent.getText());
   }
   
@@ -171,13 +189,16 @@ public class PrismaComponent extends BaseComponent{
   
   public void toPlainText(StringBuilder builder){
     builder.append(text);
-    super.toPlainText(builder);
+    toPlainTextCopied(builder);
   }
   
-  public void toLegacyText(StringBuilder builder){
-    addFormat(builder);
-    builder.append(text);
-    super.toLegacyText(builder);
+  void toPlainTextCopied(StringBuilder builder){
+    if(getExtra() != null){
+      for(BaseComponent e : getExtra()){
+        //This requires the package private method toPlainText in base component... Idk if we can use reflection or something to expose this or if that's a viable option?
+        e.toPlainText(builder);
+      }
+    }
   }
   
   @Override
