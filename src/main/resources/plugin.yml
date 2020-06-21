@@ -1,0 +1,4 @@
+name: Prisma
+version: @version@
+main: us.eunoians.prisma.Prisma
+api-version: 1.15.2
