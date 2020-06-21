@@ -6,6 +6,8 @@ import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.TextComponent;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.regex.Matcher;
@@ -183,16 +185,40 @@ public class PrismaComponent extends BaseComponent {
         return new TextComponent(this);
     }
 
+
     public void toPlainText(StringBuilder builder) {
         builder.append(text);
-        toPlainTextCopied(builder);
+
+        // Mimic the toPlainText in TextComponent using reflection to get the "toPlainText" method
+        try {
+            toPlainTextCopied(builder);
+        }
+        catch (NoSuchMethodException e) {
+
+            // Tried to get toPlainText method from BaseComponent, but it didn't exist?
+            e.printStackTrace();
+        }
     }
 
-    void toPlainTextCopied(StringBuilder builder) {
+    void toPlainTextCopied(StringBuilder builder) throws NoSuchMethodException {
         if (getExtra() != null) {
-            for (BaseComponent e : getExtra()) {
-                //This requires the package private method toPlainText in base component... Idk if we can use reflection or something to expose this or if that's a viable option?
-                e.toPlainText(builder);
+
+            // Get the package-private method from the BaseComponent class
+            Method method = BaseComponent.class.getDeclaredMethod("toPlainText", StringBuilder.class);
+
+            // Make sure it's accessible
+            method.setAccessible(true);
+
+            // Loop through the basecomponents in the "extra" list to mimic the toPlainText method in BaseComponent
+            for (BaseComponent baseComponent : getExtra()) {
+                try {
+
+                    // Invoke the method
+                    method.invoke(builder);
+
+                } catch (IllegalAccessException | InvocationTargetException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
