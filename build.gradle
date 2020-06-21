@@ -39,10 +39,7 @@ processResources {
 }
 
 shadowJar {
-    archiveName = "McRPG-${version}.jar"
-    relocate 'de.tr7zw.changeme.nbtapi', 'us.eunoians.mcrpg.nbtapi'
-    relocate 'org.slf4j', 'us.eunoians.mcrpg'
-    relocate 'org.bstats', 'us.eunoians.mcrpg'
+    archiveName = "Prisma-${version}.jar"
 }
 
 artifacts {
