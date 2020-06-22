@@ -214,7 +214,7 @@ public class PrismaComponent extends BaseComponent {
                 try {
 
                     // Invoke the method
-                    method.invoke(builder);
+                    method.invoke(baseComponent, builder);
 
                 } catch (IllegalAccessException | InvocationTargetException e) {
                     e.printStackTrace();
