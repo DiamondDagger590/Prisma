@@ -1,0 +1,4 @@
+ChatColors:
+  Red:
+    ColorCode: 'c'
+    RGB: '155:23:55'

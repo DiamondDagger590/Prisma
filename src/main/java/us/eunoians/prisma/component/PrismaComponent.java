@@ -21,7 +21,15 @@ public class PrismaComponent extends BaseComponent {
     private static final Pattern url = Pattern.compile("^(?:(https?)://)?([-\\w_\\.]{2,}\\.[a-z]{2,4})(/\\S*)?$");
 
     public PrismaComponent(String text) {
-        this.text = text;
+        String[] data = text.split("§");
+        if(data.length > 1 || data.length < text.length()){
+            for(String string : data){
+            
+            }
+        }
+        else{
+            data = text.split("&");
+        }
     }
 
     /**
