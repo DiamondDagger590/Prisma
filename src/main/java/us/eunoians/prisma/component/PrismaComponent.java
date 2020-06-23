@@ -5,6 +5,7 @@ import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.TextComponent;
+import us.eunoians.prisma.ColorProvider;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -21,15 +22,7 @@ public class PrismaComponent extends BaseComponent {
     private static final Pattern url = Pattern.compile("^(?:(https?)://)?([-\\w_\\.]{2,}\\.[a-z]{2,4})(/\\S*)?$");
 
     public PrismaComponent(String text) {
-        String[] data = text.split("§");
-        if(data.length > 1 || data.length < text.length()){
-            for(String string : data){
-            
-            }
-        }
-        else{
-            data = text.split("&");
-        }
+        this(fromLegacyText(text));
     }
 
     /**
@@ -55,9 +48,9 @@ public class PrismaComponent extends BaseComponent {
      * @return the components needed to print the message to the client
      */
     public static BaseComponent[] fromLegacyText(String message, ChatColor defaultColor) {
-        ArrayList<BaseComponent> components = new ArrayList<BaseComponent>();
+        ArrayList<BaseComponent> components = new ArrayList<>();
         StringBuilder builder = new StringBuilder();
-        TextComponent component = new TextComponent();
+        PrismaComponent component = new PrismaComponent();
         Matcher matcher = url.matcher(message);
 
         for (int i = 0; i < message.length(); i++) {
@@ -75,8 +68,8 @@ public class PrismaComponent extends BaseComponent {
                     continue;
                 }
                 if (builder.length() > 0) {
-                    TextComponent old = component;
-                    component = new TextComponent(old);
+                    PrismaComponent old = component;
+                    component = new PrismaComponent(old);
                     old.setText(builder.toString());
                     builder = new StringBuilder();
                     components.add(old);
@@ -100,8 +93,13 @@ public class PrismaComponent extends BaseComponent {
                     case RESET:
                         format = defaultColor;
                     default:
-                        component = new TextComponent();
-                        component.setColor(format);
+                        component = new PrismaComponent();
+                        if(ColorProvider.getRGBWrapper(c) != null){
+                            //TODO
+                        }
+                        else{
+                            component.setColor(format);
+                        }
                         break;
                 }
                 continue;
@@ -113,15 +111,15 @@ public class PrismaComponent extends BaseComponent {
             if (matcher.region(i, pos).find()) { //Web link handling
 
                 if (builder.length() > 0) {
-                    TextComponent old = component;
-                    component = new TextComponent(old);
+                    PrismaComponent old = component;
+                    component = new PrismaComponent(old);
                     old.setText(builder.toString());
                     builder = new StringBuilder();
                     components.add(old);
                 }
 
-                TextComponent old = component;
-                component = new TextComponent(old);
+                PrismaComponent old = component;
+                component = new PrismaComponent(old);
                 String urlString = message.substring(i, pos);
                 component.setText(urlString);
                 component.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL,

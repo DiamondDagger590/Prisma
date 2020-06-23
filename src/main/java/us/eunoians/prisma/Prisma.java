@@ -6,12 +6,11 @@ public class Prisma extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        // Plugin startup logic
-
+        new ColorProvider(this);
+        IOUtil.saveResource(this, "colors.yml", false);
     }
 
     @Override
     public void onDisable() {
-        // Plugin shutdown logic
     }
 }
