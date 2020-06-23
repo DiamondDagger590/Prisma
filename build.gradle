@@ -46,11 +46,6 @@ artifacts {
     archives shadowJar
 }
 
-lombok {
-    version = "1.18.4"
-    sha256 = ""
-}
-
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
 }
