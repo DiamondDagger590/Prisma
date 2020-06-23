@@ -1,4 +1,4 @@
 ChatColors:
-  Red:
-    ColorCode: 'c'
+  Random:
+    ColorCode: 'x'
     RGB: '155:23:55'
