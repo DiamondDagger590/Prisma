@@ -6,7 +6,7 @@ plugins {
 }
 
 //from now on this is how you'll change version
-def versionObj = new Version(major: 1, minor: 4, patch: 0, fix: 1, state: 'BETA-SNAPSHOT')
+def versionObj = new Version(major: 1, minor: 0, state: 'SNAPSHOT')
 
 group 'us.eunoians'
 version = "${versionObj.toString()}"
@@ -28,7 +28,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly 'org.spigotmc:spigot-api:1.15.2-R0.1-SNAPSHOT'
+    compileOnly 'org.spigotmc:spigot-api:1.16.1-R0.1-SNAPSHOT'
 }
 
 processResources {
@@ -52,10 +52,10 @@ tasks.withType(JavaCompile) {
 
 class Version {
 
-    String major, minor, patch, fix, state, full
+    String major, minor, state, full
 
     String getFullVersion() {
-        full = "$major.$minor.$patch.$fix-$state"
+        full = "$major.$minor-$state"
         return full
     }
 

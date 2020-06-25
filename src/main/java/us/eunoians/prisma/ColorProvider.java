@@ -5,12 +5,16 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 public class ColorProvider{
   
   private static Map<Character, RGBWrapper> colorMap = new HashMap<>();
+  private static Set<Character> vanillaCharacters = new HashSet<>(Arrays.asList('9','8','7','6','5','4','3','2','1','a','b','c','d','e','f','k','l','m','n','o','r', '&', '§'));
   
   ColorProvider(Prisma prisma){
     
@@ -40,6 +44,38 @@ public class ColorProvider{
       }
       colorMap.put(chatChar, rgbWrapper);
     }
+  }
+  
+  public static String translatePrisma(String message){
+    StringBuilder builder = new StringBuilder();
+    boolean isColor = false;
+    char colorCode = '&';
+    for(char letter : message.toCharArray()){
+      if(isColor){
+        isColor = false;
+        if(vanillaCharacters.contains(letter)){
+          builder.append(colorCode);
+          builder.append(letter);
+          continue;
+        }
+        else{
+          if(colorMap.containsKey(letter)){
+            //TODO append the ChatColor.of
+          }
+          else{
+            builder.append(colorCode);
+            builder.append(letter);
+            continue;
+          }
+        }
+      }
+      if(letter == '&' || letter == '§'){
+        isColor = true;
+        colorCode = letter;
+      }
+    }
+    
+    return builder.toString();
   }
   
   /**
