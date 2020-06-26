@@ -11,7 +11,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -107,6 +106,7 @@ public class ColorProvider {
                 builder.append(letter);
                 continue;
             }
+
             if (letter == '&' || letter == '§') {
                 isColor = true;
                 colorCode = letter;
@@ -164,25 +164,12 @@ public class ColorProvider {
          */
         public RGBWrapper(String hex) {
 
-            // Make sure we're parsing a lowercase hex string
-            hex = hex.toLowerCase();
+            Color color = Color.decode(hex);
 
-            Matcher hexMatcher = HEX_PATTERN.matcher(hex);
-
-            // Make sure it's valid hex
-            if(!hexMatcher.matches()){
-                throw new IllegalArgumentException("Invalid hex colour: " + hex);
-            }
-
-            // Make sure the hex is valid
-            if(hexMatcher.groupCount() != 3){
-                throw new IllegalArgumentException("Invalid hex colour length: " + hexMatcher.groupCount());
-            }
-
-            // Parse the rgb values from the hex
-            this.red = Integer.valueOf(hexMatcher.group(1), 16);
-            this.green = Integer.valueOf(hexMatcher.group(2), 16);
-            this.blue = Integer.valueOf(hexMatcher.group(3), 16);
+            // Get the component
+            this.red = color.getRed();
+            this.green = color.getGreen();
+            this.blue = color.getBlue();
         }
 
         /**

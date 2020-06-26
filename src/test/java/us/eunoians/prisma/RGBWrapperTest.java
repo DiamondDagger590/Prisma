@@ -13,6 +13,7 @@ public class RGBWrapperTest {
 
         // Make sure the colour gets converted to hex properly
         assertEquals("#ffba59", new ColorProvider.RGBWrapper(255, 186, 89).toHex());
+
     }
 
     @Test
