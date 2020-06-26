@@ -14,7 +14,7 @@ colors.yml, and then you are free to add your custom color codes.
 
 This will only work with plugins that hook into Prisma.
 
-You will not be able to use color codes from vanilla usages such as b, a, 4, l, etc.
+You will not be able to assign custom color codes that are currently used by vanilla, such as b, a, 4, l, etc.
 
 ### Developer Implementation
 Adding support for Prisma is amazingly easy. All you need to do is place this method in a util
