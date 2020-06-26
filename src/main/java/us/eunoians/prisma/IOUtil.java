@@ -6,6 +6,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.logging.Level;
 
+/**
+ * @author DiamondDagger590 and OxKitsune
+ */
 public class IOUtil {
   
   public static void saveResource(Prisma prisma, String resourcePath, boolean replace) {

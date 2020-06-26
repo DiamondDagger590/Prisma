@@ -14,9 +14,14 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * @author DiamondDagger590 and OxKitsune
+ */
 public class ColorProvider {
 
+    //A map of all custom color codes
     private static Map<Character, RGBWrapper> colorMap = new HashMap<>();
+    //A Set of all characters used by vanilla minecraft for coloring/font
     private static Set<Character> vanillaCharacters = new HashSet<>(Arrays.asList('9', '8', '7', '6', '5', '4', '3', '2', '1', 'a', 'b', 'c', 'd', 'e', 'f', 'k', 'l', 'm', 'n', 'o', 'r', '&', '§'));
 
     /**
@@ -55,11 +60,22 @@ public class ColorProvider {
             colorMap.put(chatChar, rgbWrapper);
         }
     }
-
+    
+    /**
+     * Translates a message with custom colour codes from the colors.yml
+     * @param message The message to translate with custom color codes
+     * @return The translated prisma message, containing translated vanilla colour codes as well
+     */
     public static String translatePrisma(String message) {
         return translatePrisma(message, true);
     }
     
+    /**
+     * Translates a message with custom colour codes from the colors.yml
+     * @param message The message to translate with custom color codes
+     * @param returnWithVanillaColor If prisma should return with translated vanilla characters
+     * @return The translated prisma message
+     */
     public static String translatePrisma(String message, boolean returnWithVanillaColor) {
         StringBuilder builder = new StringBuilder();
         boolean isColor = false;
@@ -116,7 +132,10 @@ public class ColorProvider {
     public static RGBWrapper getRGBWrapper(char chatCode) {
         return colorMap.get(chatCode);
     }
-
+    
+    /**
+     * A wrapper class containing RGB information to be stored in pair with a character
+     */
     protected static class RGBWrapper {
 
         private static final Pattern HEX_PATTERN = Pattern.compile("#?([a-f\\d]{2})([a-f\\d]{2})([a-f\\d]{2})$");
@@ -183,27 +202,51 @@ public class ColorProvider {
         public Color toColor () {
             return new Color(red, green , blue);
         }
-
+    
+        /**
+         * Gets the red amount for the wrapper
+         * @return The amount of red for the wrapper
+         */
         public int getRed() {
             return red;
         }
 
+        /**
+         * Gets the green amount for the wrapper
+         * @return The amount of green for the wrapper
+         */
         public int getGreen() {
             return green;
         }
 
-        public void setRed(int red) {
-            this.red = red;
-        }
-
+        /**
+         * Gets the blue amount for the wrapper
+         * @return The amount of blue for the wrapper
+         */
         public int getBlue() {
             return blue;
         }
-
+    
+        /**
+         * Sets the amount of red for the wrapper
+         * @param red The amount of red for the wrapper
+         */
+        public void setRed(int red) {
+            this.red = red;
+        }
+    
+        /**
+         * Sets the amount of green for the wrapper
+         * @param green The amount of green for the wrapper
+         */
         public void setGreen(int green) {
             this.green = green;
         }
-
+    
+        /**
+         * Sets the amount of blue for the wrapper
+         * @param blue The amount of blue for the wrapper
+         */
         public void setBlue(int blue) {
             this.blue = blue;
         }

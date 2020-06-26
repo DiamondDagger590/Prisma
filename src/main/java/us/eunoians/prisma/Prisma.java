@@ -4,6 +4,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 
+/**
+ * @author DiamondDagger590 and OxKitsune
+ */
 public class Prisma extends JavaPlugin {
 
     @Override
@@ -22,9 +25,5 @@ public class Prisma extends JavaPlugin {
 
         // Instantiate the colour provider
         ColorProvider.init(this);
-    }
-
-    @Override
-    public void onDisable() {
     }
 }
