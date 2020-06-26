@@ -11,6 +11,8 @@ public class ColorProviderTest {
 
         // TODO: Figure out way to run tests on ColorProvider without bukkit api
         //assertEquals("haha", ColorProvider.translatePrisma("&aHaha xd"));
+
+
     }
 
 }
