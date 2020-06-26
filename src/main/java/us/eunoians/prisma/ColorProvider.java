@@ -80,7 +80,7 @@ public class ColorProvider {
     public static String translatePrisma(String message, boolean returnWithVanillaColor) {
         StringBuilder builder = new StringBuilder();
         boolean isColor = false;
-        char colorCode = '&';
+        char colorCode = '^';
 
         // Loop through all the characters in the message
         for (char letter : message.toCharArray()) {
@@ -109,7 +109,7 @@ public class ColorProvider {
                 continue;
             }
 
-            if (letter == '&' || letter == '§') {
+            if (letter == '^' || letter == '§') {
                 isColor = true;
                 colorCode = letter;
                 continue;
