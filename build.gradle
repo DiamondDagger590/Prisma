@@ -1,9 +1,16 @@
-import org.apache.tools.ant.filters.ReplaceTokens
+plugins {
+    id 'java'
+    id 'maven'
+    id 'io.franzbecker.gradle-lombok' version '1.14'
+    id 'com.github.johnrengelman.shadow' version '2.0.4'
+}
 
-apply plugin: 'java'
+//from now on this is how you'll change version
+def versionObj = new Version(major: 1, minor: 0, state: 'RELEASE')
 
-group = 'us.eunoians'
-version = '1.0-SNAPSHOT'
+group 'us.eunoians'
+version = "${versionObj.toString()}"
+
 
 sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
@@ -21,11 +28,49 @@ repositories {
 }
 
 dependencies {
-    compileOnly 'org.spigotmc:spigot-api:1.15.2-R0.1-SNAPSHOT'
+    compileOnly 'org.spigotmc:spigot-api:1.16.1-R0.1-SNAPSHOT'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.6.2'
+    testCompile group: 'org.powermock', name: 'powermock-mockito-release-full', version: '1.5.4', ext: 'pom'
+
+}
+
+// Run JUnit tests
+test {
+	useJUnitPlatform()
+	testLogging {
+		events "passed", "skipped", "failed"
+	}
 }
 
 processResources {
     from(sourceSets.main.resources.srcDirs) {
-        filter ReplaceTokens, tokens: [version: version]
+        expand 'pluginVersion': version
+        include 'plugin.yml'
+    }
+}
+
+shadowJar {
+    archiveName = "Prisma-${version}.jar"
+}
+
+artifacts {
+    archives shadowJar
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+class Version {
+
+    String major, minor, state, full
+
+    String getFullVersion() {
+        full = "$major.$minor-$state"
+        return full
+    }
+
+    String toString() {
+        getFullVersion()
     }
 }

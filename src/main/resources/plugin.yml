@@ -1,4 +1,4 @@
 name: Prisma
-version: @version@
+version: ${pluginVersion}
 main: us.eunoians.prisma.Prisma
-api-version: 1.15.2
+api-version: 1.16
