@@ -24,13 +24,21 @@ class such as a Methods class, and change your player.sendMessage()s to run thro
 This method would provide vanilla and custom color code implementation, and if Prisma is absent,
 would not break and just use vanilla coloring.
 
-      public static void sendMessage(Player player, String message){
-       if(Bukkit.getPluginManager().isPluginEnabled("Prisma")){
-          message = ColorProvider.translatePrisma(message, false);
-        }
-       player.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
-       }
-       
-Prisma also provides over 100 colors in an enum called PrismaColor you can use as easily as so
+```java
+public static void sendMessage(Player player, String message) {
 
-    player.sendMessage(PrismaColor.BISQUE + "BISQUE");
+    // Probably want to move this to onEnable and cache the result
+    if (Bukkit.getPluginManager().isPluginEnabled("Prisma")) {
+        message = ColorProvider.translatePrisma(message, false);
+    }
+    
+    // Send the message to the player
+    player.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+}
+```
+       
+Prisma also provides over 130 colors in an enum called PrismaColor you can use as easily as so
+
+```java
+player.sendMessage(PrismaColor.SALMON + "SALMON");
+```
