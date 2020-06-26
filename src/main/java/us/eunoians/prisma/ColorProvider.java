@@ -1,23 +1,31 @@
 package us.eunoians.prisma;
 
 import com.google.common.base.Preconditions;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
+import java.awt.*;
 import java.io.File;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ColorProvider {
 
     private static Map<Character, RGBWrapper> colorMap = new HashMap<>();
     private static Set<Character> vanillaCharacters = new HashSet<>(Arrays.asList('9', '8', '7', '6', '5', '4', '3', '2', '1', 'a', 'b', 'c', 'd', 'e', 'f', 'k', 'l', 'm', 'n', 'o', 'r', '&', '§'));
 
-    ColorProvider(Prisma prisma) {
-
+    /**
+     * Initialise the {@link ColorProvider} util.
+     *
+     * @param prisma - the prisma instance that's initialising the {@link ColorProvider}
+     */
+    protected static void init (Prisma prisma) {
         //Get the colors.yml and load it in
         File file = new File(prisma.getDataFolder(), "colors.yml");
         FileConfiguration fileConfiguration = YamlConfiguration.loadConfiguration(file);
@@ -50,22 +58,35 @@ public class ColorProvider {
         StringBuilder builder = new StringBuilder();
         boolean isColor = false;
         char colorCode = '&';
+
+        // Loop through all the characters in the message
         for (char letter : message.toCharArray()) {
+
+            // If the letter is a colour code append the colour to the message
             if (isColor) {
                 isColor = false;
+
+                // Translate the vanilla colours
                 if (vanillaCharacters.contains(letter)) {
                     builder.append(colorCode);
                     builder.append(letter);
                     continue;
-                } else {
-                    if (colorMap.containsKey(letter)) {
-                        //TODO append the ChatColor.of
-                    } else {
-                        builder.append(colorCode);
-                        builder.append(letter);
-                        continue;
-                    }
                 }
+
+                // Translate the colours registered in the colour map
+                if (colorMap.containsKey(letter)) {
+
+                    // Append the hex colour to the colour map
+                    builder.append(colorCode);
+                    builder.append(ChatColor.of(colorMap.get(letter).toHex()));
+                    continue;
+                }
+
+
+
+                builder.append(colorCode);
+                builder.append(letter);
+                continue;
             }
             if (letter == '&' || letter == '§') {
                 isColor = true;
@@ -86,9 +107,9 @@ public class ColorProvider {
         return colorMap.get(chatCode);
     }
 
-    private class RGBWrapper {
+    protected static class RGBWrapper {
 
-        private static final String HEX_REGEX = "/^#?([a-f\\d]{2})([a-f\\d]{2})([a-f\\d]{2})$/i";
+        private static final Pattern HEX_PATTERN = Pattern.compile("#?([a-f\\d]{2})([a-f\\d]{2})([a-f\\d]{2})$");
 
         private int red;
         private int green;
@@ -114,19 +135,43 @@ public class ColorProvider {
          */
         public RGBWrapper(String hex) {
 
-            // Make sure it's valid hex
-            Preconditions.checkArgument(hex.matches(HEX_REGEX), "Invalid hex colour!");
+            // Make sure we're parsing a lowercase hex string
+            hex = hex.toLowerCase();
 
-            // SPlit the hex
-            String[] hexGroups = hex.split(HEX_REGEX);
+            Matcher hexMatcher = HEX_PATTERN.matcher(hex);
+
+            // Make sure it's valid hex
+            if(!hexMatcher.matches()){
+                throw new IllegalArgumentException("Invalid hex colour: " + hex);
+            }
 
             // Make sure the hex is valid
-            Preconditions.checkArgument(hexGroups.length == 3, "Invalid hex colour!");
+            if(hexMatcher.groupCount() != 3){
+                throw new IllegalArgumentException("Invalid hex colour length: " + hexMatcher.groupCount());
+            }
 
             // Parse the rgb values from the hex
-            this.red = Integer.valueOf(hexGroups[0], 16);
-            this.blue = Integer.valueOf(hexGroups[1], 16);
-            this.green = Integer.valueOf(hexGroups[2], 16);
+            this.red = Integer.valueOf(hexMatcher.group(1), 16);
+            this.green = Integer.valueOf(hexMatcher.group(2), 16);
+            this.blue = Integer.valueOf(hexMatcher.group(3), 16);
+        }
+
+        /**
+         * Convert the RGB colour components to a hex colour that can be used in {@link ChatColor#of(String)}.
+         *
+         * @return - a hexadecimal string representation of the colours in this {@link RGBWrapper}
+         */
+        public String toHex () {
+            return String.format("#%02x%02x%02x", red, green, blue);
+        }
+
+        /**
+         * Convert the RGB in this {@link RGBWrapper} to a {@link Color} that can be used in {@link ChatColor#of(Color)}.
+         *
+         * @return - a color objected created using the rgb components of this RGBWrapper
+         */
+        public Color toColor () {
+            return new Color(red, green , blue);
         }
 
         public int getRed() {

@@ -5,17 +5,23 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.File;
 
 public class Prisma extends JavaPlugin {
-    
+
     @Override
     public void onEnable() {
-        if(!this.getDataFolder().exists()){
+
+        // Make sure the datafolder exists
+        if (!this.getDataFolder().exists()) {
             this.getDataFolder().mkdirs();
         }
+
+        // Make sure the colour file exists
         File colorFile = new File("colors.yml");
-        if(!colorFile.exists()){
+        if (!colorFile.exists()) {
             IOUtil.saveResource(this, colorFile.getPath(), false);
         }
-        new ColorProvider(this);
+
+        // Instantiate the colour provider
+        ColorProvider.init(this);
     }
 
     @Override
