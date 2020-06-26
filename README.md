@@ -29,11 +29,10 @@ public static void sendMessage(Player player, String message) {
 
     // Probably want to move this to onEnable and cache the result
     if (Bukkit.getPluginManager().isPluginEnabled("Prisma")) {
-        message = ColorProvider.translatePrisma(message, false);
+
+        // Send the message to the player
+        player.sendMessage(ChatColorProvider.translatePrisma(message));
     }
-    
-    // Send the message to the player
-    player.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
 }
 ```
        
