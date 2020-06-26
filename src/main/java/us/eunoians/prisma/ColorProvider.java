@@ -4,7 +4,7 @@ import net.md_5.bungee.api.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import java.awt.*;
+import java.awt.Color;
 import java.io.File;
 import java.util.Arrays;
 import java.util.HashMap;
