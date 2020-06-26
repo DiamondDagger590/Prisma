@@ -1,6 +1,5 @@
 package us.eunoians.prisma;
 
-import com.google.common.base.Preconditions;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -50,40 +49,44 @@ public class ColorProvider {
                 int blue = Integer.parseInt(RGB[2]);
                 rgbWrapper = new RGBWrapper(red, green, blue);
             }
+            else if(fileConfiguration.contains(key + "Hex")){
+                rgbWrapper = new RGBWrapper(fileConfiguration.getString(key + "Hex"));
+            }
             colorMap.put(chatChar, rgbWrapper);
         }
     }
 
     public static String translatePrisma(String message) {
+        return translatePrisma(message, true);
+    }
+    
+    public static String translatePrisma(String message, boolean returnWithVanillaColor) {
         StringBuilder builder = new StringBuilder();
         boolean isColor = false;
         char colorCode = '&';
-
+        
         // Loop through all the characters in the message
         for (char letter : message.toCharArray()) {
-
+            
             // If the letter is a colour code append the colour to the message
             if (isColor) {
                 isColor = false;
-
+                
                 // Translate the vanilla colours
                 if (vanillaCharacters.contains(letter)) {
                     builder.append(colorCode);
                     builder.append(letter);
                     continue;
                 }
-
+                
                 // Translate the colours registered in the colour map
                 if (colorMap.containsKey(letter)) {
-
+                    
                     // Append the hex colour to the colour map
-                    builder.append(colorCode);
                     builder.append(ChatColor.of(colorMap.get(letter).toHex()));
                     continue;
                 }
-
-
-
+                
                 builder.append(colorCode);
                 builder.append(letter);
                 continue;
@@ -91,10 +94,17 @@ public class ColorProvider {
             if (letter == '&' || letter == '§') {
                 isColor = true;
                 colorCode = letter;
+                continue;
             }
+            builder.append(letter);
         }
-
-        return builder.toString();
+        
+        if(returnWithVanillaColor){
+            return ChatColor.translateAlternateColorCodes('&', builder.toString());
+        }
+        else{
+            return builder.toString();
+        }
     }
 
     /**

@@ -2,3 +2,6 @@ ChatColors:
   Random:
     ColorCode: 'x'
     RGB: '155:23:55'
+  Random2:
+    ColorCode: '?'
+    Hex: '#ff98ff'
