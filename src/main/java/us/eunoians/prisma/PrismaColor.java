@@ -148,6 +148,15 @@ public enum PrismaColor {
     private final String hex;
 
     /**
+     * Get the Hex code of the {@link PrismaColor}.
+     *
+     * @return The Hex code ie '#A52A2A'
+     */
+    public String getHex() {
+        return hex;
+    }
+
+    /**
      * Construct a new {@link PrismaColor}.
      *
      * @param hex - the hex of the colour
@@ -155,7 +164,6 @@ public enum PrismaColor {
     PrismaColor(String hex) {
         this.hex = hex;
     }
-
 
     @Override
     public String toString() {
