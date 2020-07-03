@@ -70,6 +70,53 @@ public class ColorProvider {
     }
 
     /**
+     * Translates a messages prisma custom color codes into hex codes prepended with '#'
+     *
+     * @param message The message to translate with custom color codes
+     * @return The translated prisma message, containing hex codes
+     */
+    public static String translatePrismaToHex(String message) {
+        return translatePrismaToHex(message, true);
+    }
+
+    /**
+     * Translates a messages prisma custom color codes into hex codes
+     *
+     * @param message The message to translate with custom color codes
+     * @param prepend Whether to prepend color codes with '#'
+     * @return The translated prisma message, containing hex codes
+     */
+    public static String translatePrismaToHex(String message, boolean prepend) {
+        StringBuilder builder = new StringBuilder();
+        boolean isColor = false;
+
+        // Loop through all the characters in the message
+        for (char letter : message.toCharArray()) {
+            if (letter == '&' || letter == '§') {
+                isColor = true;
+                continue;
+            }
+
+            // If the letter is a colour code append the colour to the message
+            if (isColor) {
+                isColor = false;
+
+                // Translate the colours registered in the colour map
+                if (colorMap.containsKey(letter)) {
+
+                    // Append the hex colour to the colour map
+                    builder.append(colorMap.get(letter).toHex(prepend));
+                    continue;
+                }
+            }
+
+            builder.append(letter);
+        }
+
+        return builder.toString();
+    }
+
+    /**
      * Translates a message with custom colour codes from the colors.yml
      *
      * @param message                The message to translate with custom color codes
@@ -175,7 +222,22 @@ public class ColorProvider {
          * @return - a hexadecimal string representation of the colours in this {@link RGBWrapper}
          */
         public String toHex() {
-            return String.format("#%02x%02x%02x", red, green, blue);
+            return toHex(true);
+        }
+
+        /**
+         * Convert the RGB colour components to a hex colour
+         *
+         * @param prepend Whether to prepend the color code with '#'
+         * @return - a hexadecimal string representation of the colours in this {@link RGBWrapper}
+         */
+        public String toHex(boolean prepend) {
+            StringBuilder builder = new StringBuilder();
+            if (prepend) {
+                builder.append("#");
+            }
+            builder.append(String.format("%02x%02x%02x", red, green, blue));
+            return builder.toString();
         }
 
         /**
