@@ -24,14 +24,17 @@ public class ColorProvider {
     private static Set<Character> vanillaCharacters = new HashSet<>(Arrays.asList('9', '8', '7', '6', '5', '4', '3', '2', '1', 'a', 'b', 'c', 'd', 'e', 'f', 'k', 'l', 'm', 'n', 'o', 'r', '&', '§'));
 
     /**
-     * Initialise the {@link ColorProvider} util.
+     * Load/Reload the {@link ColorProvider} util.
      *
      * @param prisma - the prisma instance that's initialising the {@link ColorProvider}
      */
-    protected static void init(Prisma prisma) {
+    protected static void load(Prisma prisma) {
         //Get the colors.yml and load it in
         File file = new File(prisma.getDataFolder(), "colors.yml");
         FileConfiguration fileConfiguration = YamlConfiguration.loadConfiguration(file);
+
+        //Clear the color map for reloads
+        colorMap.clear();
 
         //Iterate through all colors in the colors.yml
         for (String color : fileConfiguration.getConfigurationSection("ChatColors").getKeys(false)) {
@@ -57,6 +60,15 @@ public class ColorProvider {
             }
             colorMap.put(chatChar, rgbWrapper);
         }
+    }
+
+    /**
+     * Get the list of registered color codes
+     *
+     * @return Map of Character and {@link RGBWrapper}
+     */
+    public static Map<Character, RGBWrapper> getColorMap() {
+        return colorMap;
     }
 
     /**
@@ -207,9 +219,15 @@ public class ColorProvider {
          * @param hex - the hex colour code
          */
         public RGBWrapper(String hex) {
+            this(Color.decode(hex));
+        }
 
-            Color color = Color.decode(hex);
-
+        /**
+         * Construct a new {@link RGBWrapper} that takes a {@link Color} as input.
+         *
+         * @param color the color
+         */
+        public RGBWrapper(Color color) {
             // Get the component
             this.red = color.getRed();
             this.green = color.getGreen();

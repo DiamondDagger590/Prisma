@@ -1,4 +1,10 @@
 name: Prisma
+authors: [DiamondDagger590, OxKitsune]
 version: ${pluginVersion}
+website: https://www.spigotmc.org/resources/prisma.80713/
 main: us.eunoians.prisma.Prisma
 api-version: 1.16
+commands:
+  prisma:
+    description: Prisma Command
+    usage: /prisma

@@ -24,6 +24,9 @@ public class Prisma extends JavaPlugin {
         }
 
         // Instantiate the colour provider
-        ColorProvider.init(this);
+        ColorProvider.load(this);
+
+        // Register command
+        this.getCommand("prisma").setExecutor(new PrismaCommand(this));
     }
 }
